@@ -58,6 +58,7 @@ namespace CodewithNikhil.Foundation.Authentication.Saml2
                     ((ClaimsIdentity)result.Principal.Identity).ApplyClaimsTransformations(new TransformationContext(FederatedAuthenticationConfiguration, identityProvider));
                 }
             };
+            options.CookieManager = new SystemWebCookieManager();
 
             args.App.UseSaml2Authentication(options);
         }
