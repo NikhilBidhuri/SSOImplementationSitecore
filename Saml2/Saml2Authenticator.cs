@@ -17,18 +17,18 @@ namespace CodewithNikhil.Foundation.Authentication.Saml2
     // Custom processor for handling SAML2 identity providers
     public class Saml2IdentityProviderProcessor : IdentityProvidersProcessor
     {
-        private readonly string _spEntityId;
-        private readonly string _spReturnUrl;
-        private readonly string _ipEntityId;
-        private readonly string _ipMetadataLocation;
+        private readonly string ServiceProviderEntityId;
+        private readonly string ServiceProviderReturnUrl;
+        private readonly string IdentityProviderEntityId;
+        private readonly string IdentityProviderMetadataLocation;
 
         public Saml2IdentityProviderProcessor(FederatedAuthenticationConfiguration federatedAuthenticationConfiguration, ICookieManager cookieManager, BaseSettings settings) : base(federatedAuthenticationConfiguration, cookieManager, settings)
         {
             // Retrieve SAML2 configuration settings
-            _spEntityId = Settings.GetSetting("SAML2.ServiceProvider.EntityId");
-            _spReturnUrl = Settings.GetSetting("SAML2.ServiceProvider.ReturnUrl");
-            _ipEntityId = Settings.GetSetting("SAML2.IdentityProvider.EntityId");
-            _ipMetadataLocation = Settings.GetSetting("SAML2.IdentityProvider.MetadataLocation");
+            ServiceProviderEntityId = Settings.GetSetting("SAML2.ServiceProvider.EntityId");
+            ServiceProviderReturnUrl = Settings.GetSetting("SAML2.ServiceProvider.ReturnUrl");
+            IdentityProviderEntityId = Settings.GetSetting("SAML2.IdentityProvider.EntityId");
+            IdentityProviderMetadataLocation = Settings.GetSetting("SAML2.IdentityProvider.MetadataLocation");
         }
 
         // Process the SAML2 identity provider
@@ -38,15 +38,15 @@ namespace CodewithNikhil.Foundation.Authentication.Saml2
             {
                 SPOptions = new SPOptions
                 {
-                    EntityId = new EntityId(_spEntityId),
-                    ReturnUrl = new Uri(_spReturnUrl)
+                    EntityId = new EntityId(ServiceProviderEntityId),
+                    ReturnUrl = new Uri(ServiceProviderReturnUrl)
                 },
                 AuthenticationType = GetAuthenticationType()
             };
 
-            options.IdentityProviders.Add(new Sustainsys.Saml2.IdentityProvider(new EntityId(_ipEntityId), options.SPOptions)
+            options.IdentityProviders.Add(new Sustainsys.Saml2.IdentityProvider(new EntityId(IdentityProviderEntityId), options.SPOptions)
             {
-                MetadataLocation = _ipMetadataLocation,
+                MetadataLocation = IdentityProviderMetadataLocation,
                 LoadMetadata = true
             });
 
